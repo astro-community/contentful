@@ -1,0 +1,24 @@
+---
+import Document from '../layouts/Document.astro'
+
+const { entryList, EntryList } = await import('@astropub/contentful:entries?content_type=communityLink!astro')
+---
+<Document title="Astro Contentful">
+	<EntryList>{
+		Entry => (
+			<h1>
+				<Entry of="title">Fallback Title</Entry>
+			</h1>
+
+			<Entry of="content">Fallback content.</Entry>
+		)
+	}</EntryList>
+	<EntryList.None>
+		<h3>
+			Hey, there was a problem.
+		</h3>
+		<p>
+			There were no entries or the `.env.local` file is not setup.
+		</p>
+	</EntryList.None>
+</Document>

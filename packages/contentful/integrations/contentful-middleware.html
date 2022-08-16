@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en-US">
+	<head>
+		<title>Astro Contentful</title>
+		<link rel="stylesheet" href="https://unpkg.com/sanitize.css" />
+		<style>
+			/* reset */
+
+			:where(html) {
+				font-family: system-ui;
+				height: 100%;
+			}
+
+			:where(body) {
+				min-height: 100%;
+			}
+
+			:where(button) {
+				appearance: none;
+				background-color: transparent;
+				border-width: 0;
+				color: inherit;
+				font: inherit;
+				letter-spacing: inherit;
+				line-height: inherit;
+				margin: 0;
+				padding: 0;
+			}
+
+			:where(input) {
+				background-color: transparent;
+				border-width: 0;
+				color: inherit;
+				font: inherit;
+				margin: 0;
+				padding: 0;
+			}
+
+			:where(input) {
+				background-color: transparent;
+				border-width: 0;
+				color: inherit;
+				font: inherit;
+				margin: 0;
+				padding: 0;
+			}
+
+			/* theme */
+
+			:root {
+				/* reference */
+				--Line: hsl(269 79% 54%);
+				--LinkText: hsl(324 75% 38%);
+				--Overlay: hsl(227 14% 46% / 80%);
+				--Page: var(--ThemeEdge);
+				--PageGradient: linear-gradient(180deg, var(--Theme), var(--ThemeEdge));
+				--PageText: hsl(250 14% 30%);
+				--Theme: hsl(273 37% 93%);
+				--ThemeEdge: hsl(0 0% 100%);
+				--ThemeHocus: hsl(250 14% 30%);
+			}
+
+			/* style */
+
+			html {
+				/* decoration */
+				background-color: var(--Page);
+				color: var(--PageText);
+			}
+
+			body {
+				display: flex;
+
+				/* layout */
+				align-items: center;
+				justify-content: center;
+
+				/* decoration */
+				background-color: var(--Overlay);
+			}
+
+			a {
+				/* decoration */
+				color: var(--LinkText);
+				text-decoration: underline;
+			}
+
+			form {
+				display: grid;
+
+				/* layout */
+				align-items: center;
+				gap: 1rem;
+				grid-template-columns: repeat(2, 1fr);
+				max-inline-size: 28rem;
+				padding: 2rem;
+
+				/* decoration */
+				background: var(--Page);
+				box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+				color: var(--PageText);
+			}
+
+			:is(button, input, form, select) {
+				/* decoration */
+				border-radius: 0.25rem;
+			}
+
+			:is(h1, h2, h3, h4, h5, h6, hr) {
+				/* layout */
+				grid-column: 1 / 3;
+				margin-block: 0;
+			}
+
+			h1 {
+				/* layout */
+				margin-block-end: 0.5rem;
+
+				/* typography */
+				font-size: 1.875rem;
+				text-align: center;
+			}
+
+			h4 {
+				/* typography */
+				font-size: 1.25rem;
+			}
+
+			p {
+				/* layout */
+				grid-column: 1 / 3;
+				margin-block: 0;
+			}
+
+			button {
+				display: block;
+
+				/* layout */
+				margin-inline-start: auto;
+				padding: 0.5rem 1rem;
+
+				/* decoration */
+				background-color: var(--Line);
+				color: var(--Page);
+				cursor: pointer;
+				transition: scale 200ms;
+			}
+
+			button:is(:hover, :focus) {
+				/* decoration */
+				background: var(--PageText);
+				scale: 1.05;
+			}
+
+			label {
+				display: contents;
+			}
+
+			:is(input, select) {
+				/* layout */
+				grid-column: 1 / 3;
+				padding: 0.25em 0.375em;
+
+				/* decoration */
+				box-shadow: var(--accent-color) 0 0 0 1px inset;
+
+				/* reference */
+				--accent-color: var(--Theme);
+			}
+
+			:is(input, select):is(:hover, :focus) {
+				/* reference */
+				--accent-color: var(--ThemeHocus);
+			}
+
+			hr {
+				/* layout */
+				block-size: 0.125rem;
+				border-width: 0;
+				inline-size: 100%;
+				margin-block: 0;
+
+				/* decoration */
+				background: var(--Line);
+			}
+		</style>
+	</head>
+	<form method="post" autocomplete="off">
+		<h1>Astro Contentful</h1>
+		<p>
+			Thanks for adding <strong>Contentful</strong> integration!
+		</p>
+		<p>
+			Now it’s time to add your <strong>Access Token</strong>:
+		</p>
+		<label data-current>
+			<input aria-label="access token" name="token" value="{{CONTENTFUL_ACCESS_TOKEN}}" />
+		</label>
+		<p>
+			<button type="submit">Next</button>
+		</p>
+		<hr />
+		<h4>
+			Having trouble?
+		</h4>
+		<p>
+			Visit your <a href="https://app.contentful.com/" target="_blank">Contentful App</a>.
+		</p>
+		<p>
+			From the menu,
+			select <strong>Settings</strong> ▸ <strong>API keys</strong>.
+		</p>
+		<p>
+			From the API page,
+			retreive a key from the <strong>Content Delivery</strong> or <strong>Content Management</strong> sections.
+		</p>
+	</form>
+	<script type="module">
+	let [ form ] = document.forms
+	let endpoint = '{{pathToJSON}}'
+	// let state = {
+	// 	token: '{{CONTENTFUL_ACCESS_TOKEN}}',
+	// 	space: '{{CONTENTFUL_SPACE}}'
+	// }
+	let state = {
+		token: '{{CONTENTFUL_ACCESS_TOKEN}}',
+		space: ''
+	}
+
+	const onchange = async () => {
+		let formData = new FormData(form)
+
+		state.token = form.elements.token?.value || null
+		state.space = form.elements.space?.value || null
+
+		const requestURI = new URL(endpoint, location.origin)
+		const request = new Request(requestURI, {
+			method: 'POST',
+			body: JSON.stringify(state),
+		})
+
+		const response = await fetch(request)
+		const responseJSO = await response.json()
+
+		if (responseJSO?.sys?.type === 'Array') {
+			insertSpaceSelect(responseJSO)
+
+			return
+		}
+
+		if (responseJSO?.sys?.type === 'Space') {
+			location.href = '/'
+
+			return
+		}
+	}
+
+	const insertSpaceSelect = (response = {}) => {
+		let nowEl = form.querySelector('[data-current]')
+
+		delete nowEl.dataset.nowEl
+
+		const fragment = new DocumentFragment()
+
+		const paragraph = fragment.appendChild(
+			create('p', {
+				innerHTML: 'Thank you! Now, please choose your <strong>space</strong>:'
+			})
+		)
+
+		const selectEl = create('select', { name: 'space' })
+		selectEl.setAttribute('aria-label', 'space')
+
+		for (const item of response.items) {
+			const optionEl = selectEl.appendChild(
+				create('option', { textContent: item.name, value: item.sys.id })
+			)
+		}
+
+		const labelEl = create('label', { dataset: { current: true } })
+
+		labelEl.append(selectEl)
+
+		fragment.appendChild(labelEl)
+
+		nowEl.after(fragment)
+	}
+
+	const create = (name, props) => {
+		let element = document.createElement(name)
+		for (let name in props) {
+			if (name === 'dataset') {
+				Object.assign(element.dataset, props[name])
+			} else {
+				element[name] = props[name]
+			}
+		}
+		return element
+	}
+
+	form.onsubmit = (event) => {
+		event.preventDefault()
+
+		onchange()
+	}
+	</script>
+</html>

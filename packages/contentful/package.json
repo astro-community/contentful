@@ -1,0 +1,47 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@astropub/contentful",
+	"description": "Use Contentful in Astro",
+	"version": "0.1.0",
+	"type": "module",
+	"license": "CC0-1.0",
+	"exports": {
+		".": {
+			"default": "./astro-contentful.js",
+			"types": "./astro-contentful.d.ts"
+		},
+		"./astro-contentful": {
+			"default": "./astro-contentful.js",
+			"types": "./astro-contentful.d.ts"
+		},
+		"./global": {
+			"types": "./global.d.ts"
+		},
+		"./package": "./package.json",
+		"./package.json": "./package.json"
+	},
+	"main": "astro-contentful.js",
+	"types": "astro-contentful.d.ts",
+	"unpkg": "astro-contentful.js",
+	"jsdelivr": "astro-contentful.js",
+	"sideEffects": false,
+	"files": [
+		"bundled",
+		"integrations",
+		"astro-contentful.js",
+		"astro-contentful.d.ts"
+	],
+	"keywords": [
+		"astro",
+		"astro-component",
+		"ui",
+		"perf",
+		"performance",
+		"content",
+		"contentful"
+	],
+	"author": "Jonathan Neal <jonathantneal@hotmail.com>",
+	"bugs": "https://github.com/astro-community/contentful/issues",
+	"homepage": "https://github.com/astro-community/contentful",
+	"repository": "https://github.com/astro-community/contentful.git"
+}
